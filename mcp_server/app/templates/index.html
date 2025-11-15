@@ -86,10 +86,7 @@
                 }
             }
         });
-
-        // ------------------------------
         // LOAD HISTORICAL OHLCV
-        // ------------------------------
         async function loadHistorical() {
             const res = await fetch(`/historical/{{ exchange }}/{{ symbol }}`);
             const data = await res.json();
@@ -106,9 +103,7 @@
 
         loadHistorical();
 
-        // ------------------------------
         // SSE REAL-TIME FEED
-        // ------------------------------
         const evtSource = new EventSource(`/sse/ticker/{{ exchange }}/{{ symbol }}`);
 
         evtSource.onmessage = function(event) {
