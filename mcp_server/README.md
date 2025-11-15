@@ -47,3 +47,9 @@ This repository implements a Python-based MCP server to retrieve real-time and h
 ## Deployment & GitHub
 - This package is ready to be pushed to GitHub. After pushing, provide the repo URL as requested.
 
+## Dashboard visible link
+http://localhost:8000/dashboard/binance/BTC/USDT
+
+
+
+

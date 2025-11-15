@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ exchange }} {{ symbol }} - Crypto Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+
+    <style>
+        body {
+            background: radial-gradient(circle at top, #0d0d0d, #000000);
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .neon {
+            text-shadow: 0 0 12px #12f7f7;
+        }
+    </style>
+</head>
+
+<body class="p-8">
+
+    <h1 class="text-center text-4xl font-bold neon mb-6">
+        {{ exchange | upper }} — {{ symbol }} Dashboard
+    </h1>
+
+    <div class="glass p-6 rounded-2xl max-w-3xl mx-auto shadow-xl mb-10">
+        <h2 class="text-2xl font-semibold mb-3">Live Ticker</h2>
+
+        <div class="grid grid-cols-3 text-center text-xl gap-4">
+            <div class="p-4 glass rounded-xl">
+                <p class="text-gray-300">Last Price</p>
+                <span class="text-3xl font-bold text-green-400" id="lastPrice">{{ ticker.last }}</span>
+            </div>
+
+            <div class="p-4 glass rounded-xl">
+                <p class="text-gray-300">Bid</p>
+                <span class="text-3xl font-bold text-blue-400" id="bid">{{ ticker.bid }}</span>
+            </div>
+
+            <div class="p-4 glass rounded-xl">
+                <p class="text-gray-300">Ask</p>
+                <span class="text-3xl font-bold text-red-400" id="ask">{{ ticker.ask }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass p-6 rounded-2xl max-w-5xl mx-auto shadow-xl">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Historical Chart</h2>
+        <canvas id="ohlcvChart" height="140"></canvas>
+    </div>
+
+    <script>
+        const lastPriceEl = document.getElementById("lastPrice");
+        const bidEl = document.getElementById("bid");
+        const askEl = document.getElementById("ask");
+
+        const ctx = document.getElementById("ohlcvChart").getContext("2d");
+
+        const chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "{{ symbol }} Price",
+                    borderColor: "#12f7f7",
+                    borderWidth: 2,
+                    data: [],
+                    tension: 0.25
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: "white", font: { size: 16 } } }
+                },
+                scales: {
+                    x: { ticks: { color: "white" }, grid: { color: "rgba(255,255,255,0.1)" } },
+                    y: { ticks: { color: "white" }, grid: { color: "rgba(255,255,255,0.1)" } }
+                }
+            }
+        });
+
+        // ------------------------------
+        // LOAD HISTORICAL OHLCV
+        // ------------------------------
+        async function loadHistorical() {
+            const res = await fetch(`/historical/{{ exchange }}/{{ symbol }}`);
+            const data = await res.json();
+
+            const prices = data.ohlcv.map(candle => candle[4]);   // close price
+            const times = data.ohlcv.map(candle =>
+                new Date(candle[0]).toLocaleTimeString()
+            );
+
+            chart.data.labels = times;
+            chart.data.datasets[0].data = prices;
+            chart.update();
+        }
+
+        loadHistorical();
+
+        // ------------------------------
+        // SSE REAL-TIME FEED
+        // ------------------------------
+        const evtSource = new EventSource(`/sse/ticker/{{ exchange }}/{{ symbol }}`);
+
+        evtSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+
+            lastPriceEl.textContent = data.last;
+            bidEl.textContent = data.bid;
+            askEl.textContent = data.ask;
+
+            if (chart.data.labels.length > 60) {
+                chart.data.labels.shift();
+                chart.data.datasets[0].data.shift();
+            }
+
+            chart.data.labels.push(new Date(data.timestamp).toLocaleTimeString());
+            chart.data.datasets[0].data.push(data.last);
+
+            chart.update();
+        };
+    </script>
+
+</body>
+</html>
