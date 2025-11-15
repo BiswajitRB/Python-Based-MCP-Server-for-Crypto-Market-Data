@@ -1,0 +1,6 @@
+Initialize a git repo here and push to GitHub. Example:
+
+git init
+git add .
+git commit -m "Initial commit - MCP server"
+# create repo on GitHub and push
