@@ -5,3 +5,4 @@ cachetools
 httpx
 pytest
 pytest-asyncio
+jinja2
