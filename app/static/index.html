@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BINANCE Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background: #05070d;
+            color: white;
+            font-family: Arial;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: #67e8f9;
+            text-shadow: 0 0 10px #22d3ee;
+        }
+
+        .card {
+            background: #111827;
+            padding: 20px;
+            margin: 20px auto;
+            width: 60%;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.7);
+        }
+
+        .ticker {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .box {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 10px;
+            width: 30%;
+        }
+
+        .green { color: #22c55e; }
+        .blue { color: #60a5fa; }
+        .red { color: #f87171; }
+
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>BINANCE — BTC/USDT Dashboard</h1>
+
+<div class="card">
+    <h3>Live Ticker</h3>
+
+    <div class="ticker">
+        <div class="box">
+            <div>Last Price</div>
+            <div id="last" class="green">--</div>
+        </div>
+
+        <div class="box">
+            <div>Bid</div>
+            <div id="bid" class="blue">--</div>
+        </div>
+
+        <div class="box">
+            <div>Ask</div>
+            <div id="ask" class="red">--</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Historical Chart</h3>
+    <canvas id="chart"></canvas>
+</div>
+
+<script>
+const ctx = document.getElementById("chart").getContext("2d");
+
+let labels = [];
+let prices = [];
+
+const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "BTC/USDT Price",
+            data: prices,
+            borderColor: "#22d3ee",
+            tension: 0.3,
+            fill: false,
+            pointRadius: 3
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { labels: { color: "white" } }
+        },
+        scales: {
+            x: { ticks: { color: "#ccc" }, grid: { color: "#333" }},
+            y: { ticks: { color: "#ccc" }, grid: { color: "#333" }}
+        }
+    }
+});
+
+// 🔹 Load historical
+async function loadData() {
+    const res = await fetch("/ohlcv?symbol=BTC/USDT");
+    const json = await res.json();
+
+    const raw = json.data;
+
+    raw.forEach(d => {
+        labels.push(new Date(d[0]).toLocaleTimeString());
+        prices.push(d[4]);
+    });
+
+    chart.update();
+}
+
+// 🔹 WebSocket live
+const socket = new WebSocket("ws://127.0.0.1:8000/ws?symbol=BTC/USDT");
+
+socket.onmessage = function(event) {
+    const msg = JSON.parse(event.data);
+
+    const last = msg.last || msg.close;
+    const bid = msg.bid || (last - 1);
+    const ask = msg.ask || (last + 1);
+
+    document.getElementById("last").innerText = last;
+    document.getElementById("bid").innerText = bid;
+    document.getElementById("ask").innerText = ask;
+
+    const time = new Date().toLocaleTimeString();
+
+    labels.push(time);
+    prices.push(last);
+
+    if (labels.length > 50) {
+        labels.shift();
+        prices.shift();
+    }
+
+    chart.update();
+};
+
+loadData();
+</script>
+
+</body>
+</html>
