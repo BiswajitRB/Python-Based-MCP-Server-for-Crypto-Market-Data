@@ -250,8 +250,66 @@ MCA Student | Backend & DevOps Enthusiast
 ---
 
 ## 📜 License
+# 📜 MIT License
 
-MIT License
+Copyright (c) 2026 **Biswajit Andia**
+
+---
+
+## 🔓 Permission
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the **"Software"**), to deal
+in the Software without restriction, including without limitation the rights to:
+
+* ✅ Use
+* ✅ Copy
+* ✅ Modify
+* ✅ Merge
+* ✅ Publish
+* ✅ Distribute
+* ✅ Sublicense
+* ✅ Sell copies
+
+---
+
+## 📌 Conditions
+
+The above copyright notice and this permission notice shall be included in:
+
+* All copies of the Software
+* Substantial portions of the Software
+
+---
+
+## ⚠️ Disclaimer
+
+THE SOFTWARE IS PROVIDED **"AS IS"**, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF:
+
+* MERCHANTABILITY
+* FITNESS FOR A PARTICULAR PURPOSE
+* NON-INFRINGEMENT
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES,
+OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+## 🚀 Summary
+
+This project is:
+
+* 🔓 Open-source
+* 🧠 Free to use
+* 🛠️ Free to modify
+* 💼 Safe for personal & commercial use
+
+---
+
+💡 *Built with passion by Biswajit Andia*
+
 
 <img width="1914" height="988" alt="image" src="https://github.com/user-attachments/assets/f5b0af8c-1cb8-473b-8e1c-e6a0c5baab37" />
 
