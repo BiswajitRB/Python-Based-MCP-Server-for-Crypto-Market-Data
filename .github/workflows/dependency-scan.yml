@@ -14,6 +14,6 @@ jobs:
                 python-version: "3.13"
 
             - name: install code scanning tool
-              run: pip install devops-requirements.txt
+              run: pip install -r devops-requirements.txt
             - name: validate dependencies
               run: pip-audit -r requirements.txt
