@@ -1,0 +1,23 @@
+name: code quality check
+on:
+    workflow_dispatch:
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                pyhon-version: [3.8, 3.9, 3.10, 3.11]
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v6
+            
+            - name: set up python ${{matrix.pyhon-version}}
+              uses: actions/setup-python@v6
+              with:
+                python-version: ${{matrix.pyhon-version}}
+            - name: install dependency
+              run: pip install -r devops-requirements.txt
+
+            - name: run code quality check
+              run: flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics     # E9: syntax errors, F63: invalid syntax, F7: logic errors, F82: undefined variables.
