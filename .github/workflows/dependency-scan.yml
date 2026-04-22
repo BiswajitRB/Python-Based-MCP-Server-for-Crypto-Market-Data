@@ -1,0 +1,19 @@
+name: dependency scan
+on:
+    workflow_dispatch:
+jobs:
+    dependency-scan:
+        runs-on: ubuntu-letest
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v6
+
+            - name: python setup
+              uses: actions/setup-python@6
+              with:
+                python-version: "3.14"
+
+            - name: install code scanning tool
+              run: pip install devops-requirements.txt
+            - name: validate dependencies
+              run: pip-audit -r requirements.txt

@@ -1,6 +1,6 @@
 name: code quality check
 on:
-    workflow_dispatch:
+    workflow_call:
 jobs:
     validate:
         runs-on: ubuntu-latest
