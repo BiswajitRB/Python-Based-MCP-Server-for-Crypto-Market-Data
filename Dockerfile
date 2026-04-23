@@ -1,3 +1,4 @@
+# here we use multi-stage docker file for security purpose and reduce the storage (volume) 
 # STAGE 1: Builder
 FROM python:3.11-slim AS builder
 
