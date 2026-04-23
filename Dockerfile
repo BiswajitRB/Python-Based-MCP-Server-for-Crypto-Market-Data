@@ -7,9 +7,9 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install build dependencies (only needed here)
+# Install build dependencies (only needed here)  version can be change or avoid->ignore=DL3008
 RUN apt-get update && \
-    apt-get install build-essential=12.9 -y --no-install-recommends build-essential && \
+    apt-get install -y --no-install-recommends build-essential=12.9 && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
