@@ -1,32 +1,40 @@
 # here we use multi-stage docker file for security purpose and reduce the storage (volume) 
-# STAGE 1: Builder
-FROM python:3.11-slim AS builder
+# -------- Stage 1: Builder --------
+FROM python:3.11.9-slim AS builder
 
 WORKDIR /app
 
-# Install build tools (only in builder)
-RUN apt-get update && apt-get install -y build-essential
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install build dependencies (only needed here)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
 COPY requirements.txt .
 
-# Install dependencies into a separate folder
-RUN pip install --upgrade pip \
-    && pip install --prefix=/install --no-cache-dir -r requirements.txt
+# Install dependencies into a custom folder
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# STAGE 2: Runtime
-FROM python:3.11-slim
+
+# -------- Stage 2: Runtime --------
+FROM python:3.11.9-slim
 
 WORKDIR /app
 
-# Copy installed dependencies from builder
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Copy only installed packages from builder
 COPY --from=builder /install /usr/local
 
 # Copy application code
 COPY . .
 
 # Expose port
-EXPOSE 8000
+EXPOSE 80
 
-# Run FastAPI
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run FastAPI app
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "app:app", "--bind", "0.0.0.0:80"]
