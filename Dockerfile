@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Install build dependencies (only needed here)
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential && \
+    apt-get install build-essential=12.9 -y --no-install-recommends build-essential && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
