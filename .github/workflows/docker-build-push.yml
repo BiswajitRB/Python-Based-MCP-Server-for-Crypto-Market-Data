@@ -1,9 +1,11 @@
 name: docker-build-push           #actual CI PART, which is build and push the docker image to docker hub
 on:
-    workflow_dispatch:
+    workflow_call:
         secrets:
-            DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
-            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+           DOCKERHUB_TOKEN:
+            required: true
+           DOCKERHUB_USER:
+            required: true
 jobs:
     build-and-push:
         runs-on: ubuntu-latest
