@@ -4,4 +4,4 @@ on:
     workflow_dispatch:
 jobs:
     docker-build-push:
-        uses: ./.github/workflows/devsecops-pipline.yml
+        uses: ./.github/workflows/docker-build-push.yml
