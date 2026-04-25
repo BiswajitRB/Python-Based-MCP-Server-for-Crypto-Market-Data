@@ -1,0 +1,7 @@
+name: end to end pipline getways        #all devsecops pipline called here
+on:
+    push:
+    workflow_dispatch:
+jobs:
+    docker-build-push:
+        uses: ./.github/workflows/devsecops-pipline.yml

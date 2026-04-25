@@ -1,7 +1,7 @@
 name: docker-build-push           #actual CI PART, which is build and push the docker image to docker hub
 on:
-    workflow_dispatch:
-        inputs:
+    workflow_call:
+        secrets:
            DOCKERHUB_TOKEN:
             required: true
            DOCKERHUB_USER:
