@@ -15,7 +15,7 @@ jobs:
             - name: login to docker hub
               uses: docker/login-action@v4
               with: 
-                username: ${{ vars.DOCKERHUB_USER }}
+                username: ${{ secrets.DOCKERHUB_USER }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
             - name: build and push to  docker
               uses: docker/build-push-action@v4
@@ -23,6 +23,6 @@ jobs:
                   context: .      #the context is the location of the docker file, which is in the root directory of the repository, so we use . to specify the current directory as the context
                   push: true
                   tags: |
-                      ${{ vars.DOCKERHUB_USER }}/github-actions-app:latest
-                      ${{ vars.DOCKERHUB_USER }}/github-actions-app:${{github.sha}}
-                      ${{ vars.DOCKERHUB_USER }}/github-actions-app:${{ github.ref_name }}
+                      ${{ secrets.DOCKERHUB_USER }}/github-actions-app:latest
+                      ${{ secrets.DOCKERHUB_USER }}/github-actions-app:${{github.sha}}
+                      ${{ secrets.DOCKERHUB_USER }}/github-actions-app:${{ github.ref_name }}
