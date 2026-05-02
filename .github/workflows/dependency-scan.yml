@@ -1,6 +1,6 @@
 name: dependency scan
 on:
-    workflow_dispatch:
+    workflow_call:
 jobs:
     dependency-scan:
         runs-on: ubuntu-latest

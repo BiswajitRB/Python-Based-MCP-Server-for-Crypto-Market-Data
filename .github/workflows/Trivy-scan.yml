@@ -1,1 +1,25 @@
+name: docker image scan
 
+on:
+  workflow_call:
+        secrets:
+           DOCKERHUB_TOKEN:  #for access the dockerhub we need this secret key                
+            required: true
+jobs:
+    Docker_image_validation:
+        runs-on: ubuntu-latest
+        steps:
+            - name: code checkout
+              uses: actions/checkout@v4
+            - name: login to docker hub               #after build the image from docker file where we find the image (dockerhub)
+              uses: docker/login-action@v4            # so first we need to login dockerhub 
+              with:
+                username: ${{vars.DOCKERHUB_USER}}        # for that reason we need this step to login
+                password: ${{secrets.DOCKERHUB_TOKEN}}
+            
+            - name: Trivy scanner 
+              uses: aquasecurity/trivy-action@0.35.0
+              with:
+                image-ref: ${{ vars.DOCKERHUB_USER }}/github-actions-app:${{github.sha}}
+                severity: 'CRITICAL,HIGH'
+                exit-code: '1'
