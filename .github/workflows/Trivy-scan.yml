@@ -1,10 +1,7 @@
 name: docker image scan
 
 on:
-  workflow_call:
-        secrets:
-           DOCKERHUB_TOKEN:  #for access the dockerhub we need this secret key                
-            required: true
+  workflow_dispatch:
 jobs:
     Docker_image_validation:
         runs-on: ubuntu-latest
