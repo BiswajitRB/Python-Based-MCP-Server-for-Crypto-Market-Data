@@ -15,7 +15,7 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USER }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
             - name: build and push to  docker
-              uses: docker/build-push-action@v4
+              uses: docker/build-push-action@v7
               with:
                   context: .      #the context is the location of the docker file, which is in the root directory of the repository, so we use . to specify the current directory as the context
                   push: true
