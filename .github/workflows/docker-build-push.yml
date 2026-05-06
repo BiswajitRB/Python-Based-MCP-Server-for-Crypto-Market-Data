@@ -20,6 +20,6 @@ jobs:
                   context: .      #the context is the location of the docker file, which is in the root directory of the repository, so we use . to specify the current directory as the context
                   push: true
                   tags: |
-                      ${{ secrets.DOCKERHUB_USER }}/github-actions-app:latest
-                      ${{ secrets.DOCKERHUB_USER }}/github-actions-app:${{github.sha}}
-                      ${{ secrets.DOCKERHUB_USER }}/github-actions-app:${{ github.ref_name }}
+                      ${{ secrets.DOCKERHUB_USER }}/crypto-mcp-server:latest
+                      ${{ secrets.DOCKERHUB_USER }}/crypto-mcp-server:${{github.sha}}
+                      ${{ secrets.DOCKERHUB_USER }}/crypto-mcp-server:${{ github.ref_name }}
